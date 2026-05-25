@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>コンサル思考クイズ</title>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8398161859137802"
+     crossorigin="anonymous"></script>
+
+<style>
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  background:linear-gradient(135deg,#0f172a,#1e293b,#334155);
+  color:#fff;
+}
+header{
+  padding:28px 16px;
+  text-align:center;
+  background:linear-gradient(135deg,#2563eb,#7c3aed);
+}
+header h1{margin:0;font-size:30px}
+header p{opacity:.9}
+.container{max-width:900px;margin:auto;padding:18px}
+.ad-box{
+  margin:18px auto;
+  padding:10px;
+  background:#fff;
+  border-radius:14px;
+  color:#111;
+  text-align:center;
+}
+.card{
+  background:rgba(255,255,255,.1);
+  border:1px solid rgba(255,255,255,.2);
+  border-radius:22px;
+  padding:24px;
+  box-shadow:0 20px 50px rgba(0,0,0,.25);
+}
+.status{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  margin-bottom:16px;
+  flex-wrap:wrap;
+}
+.badge{
+  background:rgba(255,255,255,.15);
+  padding:8px 12px;
+  border-radius:999px;
+  font-size:14px;
+}
+.question{
+  font-size:22px;
+  font-weight:800;
+  line-height:1.5;
+  margin:18px 0;
+}
+.options{
+  display:grid;
+  gap:12px;
+}
+button.option{
+  width:100%;
+  padding:15px;
+  border:none;
+  border-radius:15px;
+  background:#fff;
+  color:#0f172a;
+  font-size:16px;
+  font-weight:700;
+  cursor:pointer;
+  text-align:left;
+  transition:.2s;
+}
+button.option:hover{
+  transform:translateY(-2px);
+  background:#dbeafe;
+}
+button.correct{background:#22c55e!important;color:white}
+button.wrong{background:#ef4444!important;color:white}
+.explain{
+  margin-top:18px;
+  padding:16px;
+  border-radius:14px;
+  background:rgba(0,0,0,.25);
+  display:none;
+  line-height:1.7;
+}
+.progress{
+  height:12px;
+  background:rgba(255,255,255,.2);
+  border-radius:999px;
+  overflow:hidden;
+  margin:16px 0;
+}
+.bar{
+  height:100%;
+  width:0%;
+  background:linear-gradient(90deg,#38bdf8,#a78bfa);
+}
+.result{
+  display:none;
+  text-align:center;
+}
+.result h2{font-size:30px}
+.restart{
+  margin-top:20px;
+  padding:14px 24px;
+  border:none;
+  border-radius:999px;
+  background:#facc15;
+  font-weight:900;
+  cursor:pointer;
+}
+.small{opacity:.8;font-size:14px}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>コンサル思考クイズ</h1>
+  <p>問題解決力・仮説思考・数字感覚を鍛える診断ゲーム</p>
+</header>
+
+<div class="container">
+
+  <div class="ad-box">
+    <!-- UIゲーム -->
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-8398161859137802"
+         data-ad-slot="6325875393"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>
+         (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+  </div>
+
+  <div class="card" id="quizCard">
+    <div class="status">
+      <div class="badge" id="count">Q1 / 30</div>
+      <div class="badge" id="score">Score 0</div>
+      <div class="badge" id="level">Consultant Mode</div>
+    </div>
+
+    <div class="progress">
+      <div class="bar" id="bar"></div>
+    </div>
+
+    <div class="question" id="question"></div>
+    <div class="options" id="options"></div>
+    <div class="explain" id="explain"></div>
+  </div>
+
+  <div class="ad-box">
+    <!-- UIゲーム -->
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-8398161859137802"
+         data-ad-slot="6325875393"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>
+         (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+  </div>
+
+  <div class="card result" id="result">
+    <h2 id="resultTitle"></h2>
+    <p id="resultText"></p>
+    <p class="small" id="finalScore"></p>
+    <button class="restart" onclick="restartQuiz()">もう一度挑戦する</button>
+  </div>
+
+  <div class="ad-box">
+    <!-- UIゲーム -->
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-8398161859137802"
+         data-ad-slot="6325875393"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>
+         (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+  </div>
+
+</div>
+
+<script>
+const questions = [
+  {
+    q:"売上が急に落ちた時、最初に見るべきものは？",
+    options:["社長の気合い","売上を分解した要素","社員の性格","競合の悪口"],
+    answer:1,
+    exp:"コンサル思考では、売上＝客数×単価×購入頻度のように分解して原因を探します。"
+  },
+  {
+    q:"問題解決で最も避けたい進め方は？",
+    options:["仮説を置く","数字で確認する","思いつきで全部やる","優先順位をつける"],
+    answer:2,
+    exp:"思いつきで全部やると時間もお金も浪費します。仮説→検証が基本です。"
+  },
+  {
+    q:"利益を増やす方法として正しい分解は？",
+    options:["利益＝売上−費用","利益＝気合い×根性","利益＝人数＋会議","利益＝広告費×投稿数"],
+    answer:0,
+    exp:"まず利益を売上と費用に分解します。そこから売上改善かコスト削減かを考えます。"
+  },
+  {
+    q:"会議で意見が割れた時、コンサル的に有効なのは？",
+    options:["声が大きい人に従う","論点を整理する","多数決だけで決める","一旦忘れる"],
+    answer:1,
+    exp:"論点を整理すると、何について意見が違うのかが明確になります。"
+  },
+  {
+    q:"仮説思考とは？",
+    options:["証拠なしに決めつけること","最初に答えの仮置きをして検証すること","考えないこと","過去だけを見ること"],
+    answer:1,
+    exp:"仮説思考は、仮の答えを置き、データや現場情報で検証する考え方です。"
+  },
+  {
+    q:"売上100万円、費用70万円の利益は？",
+    options:["170万円","100万円","70万円","30万円"],
+    answer:3,
+    exp:"利益＝売上−費用なので、100万円−70万円＝30万円です。"
+  },
+  {
+    q:"顧客満足度が低い原因を探る時、最初にするべきことは？",
+    options:["SNSで謝るだけ","不満の種類を分類する","価格を上げる","担当者を怒る"],
+    answer:1,
+    exp:"不満を価格・品質・接客・納期などに分類すると、打ち手が見えます。"
+  },
+  {
+    q:"優先順位を決める時に使いやすい軸は？",
+    options:["好き嫌い","インパクトと実行難易度","雰囲気","上司の機嫌"],
+    answer:1,
+    exp:"インパクトが大きく、実行しやすい施策から着手するのが基本です。"
+  },
+  {
+    q:"MECEとは？",
+    options:["漏れなくダブりなく","早く安く","気合いと根性","売上最大化のみ"],
+    answer:0,
+    exp:"MECEは、物事を漏れなくダブりなく整理する考え方です。"
+  },
+  {
+    q:"新規事業を考える時、最初に確認したいことは？",
+    options:["ロゴの色","市場ニーズ","名刺デザイン","オフィスの広さ"],
+    answer:1,
+    exp:"需要がなければ事業は伸びません。まず市場ニーズの確認が重要です。"
+  },
+  {
+    q:"A案は効果大・難易度高、B案は効果中・難易度低。最初に試すなら？",
+    options:["必ずA案","必ずB案","状況によりB案から小さく検証","何もしない"],
+    answer:2,
+    exp:"実行しやすい施策で早く検証し、学びを得るのが有効です。"
+  },
+  {
+    q:"数字を見る時に重要なのは？",
+    options:["合計だけ見る","比較する","見ない","大きい数字だけ信じる"],
+    answer:1,
+    exp:"前月比・前年比・競合比など、比較することで意味が出ます。"
+  },
+  {
+    q:"顧客単価を上げる施策はどれ？",
+    options:["セット販売を作る","営業時間を短くする","問い合わせを無視する","在庫を減らす"],
+    answer:0,
+    exp:"セット販売や上位プランは、顧客単価を上げる代表的な施策です。"
+  },
+  {
+    q:"原因分析で使う『なぜ？』を繰り返す手法は？",
+    options:["5Why","5Run","5Cost","5Mood"],
+    answer:0,
+    exp:"5Why分析は、なぜを繰り返して根本原因に近づく手法です。"
+  },
+  {
+    q:"施策を考える前に必要なことは？",
+    options:["現状把握","広告出稿","人員削減","デザイン変更"],
+    answer:0,
+    exp:"現状を正しく把握しないと、効果的な施策は選べません。"
+  },
+  {
+    q:"売上が伸びているのに利益が減る理由としてあり得るのは？",
+    options:["費用が増えている","天気が良い","商品名が短い","社員が増えたから必ず良い"],
+    answer:0,
+    exp:"売上が増えても、広告費・人件費・仕入れ費が増えすぎると利益は減ります。"
+  },
+  {
+    q:"資料作成で重要なのは？",
+    options:["文字を大量に入れる","1スライド1メッセージ","色を全部使う","結論を隠す"],
+    answer:1,
+    exp:"読み手に伝わる資料は、1枚ごとのメッセージが明確です。"
+  },
+  {
+    q:"プレゼンで最初に伝えるべきことは？",
+    options:["結論","雑談だけ","細かい計算式","参考資料"],
+    answer:0,
+    exp:"コンサル資料では、結論ファーストが基本です。"
+  },
+  {
+    q:"市場規模を見る理由は？",
+    options:["参入余地を判断するため","なんとなくかっこいいから","資料を長くするため","競合を無視するため"],
+    answer:0,
+    exp:"市場が小さすぎると、どれだけ頑張っても大きな売上になりにくいです。"
+  },
+  {
+    q:"KPIとは？",
+    options:["重要業績評価指標","会社の名前","利益そのもの","会議の種類"],
+    answer:0,
+    exp:"KPIは目標達成に向けて追うべき重要な指標です。"
+  },
+  {
+    q:"ECサイトの購入率を改善するなら見るべき指標は？",
+    options:["訪問者数だけ","カート投入率・離脱率・購入率","社員数","倉庫の広さ"],
+    answer:1,
+    exp:"購入までの流れを分解して、どこで離脱しているかを見ることが重要です。"
+  },
+  {
+    q:"課題と原因の違いとして正しいのは？",
+    options:["課題は解決すべき問題、原因はそれを生む要因","同じ意味","原因は考えなくていい","課題は感想だけ"],
+    answer:0,
+    exp:"課題と原因を混同すると、打ち手がズレます。"
+  },
+  {
+    q:"競合分析で見るべきものは？",
+    options:["価格・強み・顧客層・販売方法","会社名の長さ","社長の趣味","オフィスの階数"],
+    answer:0,
+    exp:"競合の提供価値や価格、ターゲットを見ると自社の打ち手が見えます。"
+  },
+  {
+    q:"売上を伸ばす3要素として近いものは？",
+    options:["客数・単価・頻度","社員数・机・椅子","会議・資料・雑談","色・音・形"],
+    answer:0,
+    exp:"売上は客数、単価、購入頻度に分解して考えると改善しやすいです。"
+  },
+  {
+    q:"施策実行後に必ずするべきことは？",
+    options:["効果検証","忘れる","別の施策を全部同時にやる","感覚で成功にする"],
+    answer:0,
+    exp:"実行したら、結果を測定して次の改善につなげます。"
+  },
+  {
+    q:"ロジックツリーの目的は？",
+    options:["問題を構造化する","絵を描く","会議時間を伸ばす","結論をぼかす"],
+    answer:0,
+    exp:"ロジックツリーは、問題を分解して原因や打ち手を整理するために使います。"
+  },
+  {
+    q:"『誰に売るか』を決める考え方は？",
+    options:["ターゲティング","コスト削減","在庫管理","請求処理"],
+    answer:0,
+    exp:"ターゲティングは、狙う顧客層を明確にする考え方です。"
+  },
+  {
+    q:"良い仮説の条件は？",
+    options:["検証できる","絶対に外れない","数字が不要","長ければ良い"],
+    answer:0,
+    exp:"仮説は検証できる形であることが重要です。"
+  },
+  {
+    q:"売上が伸びない飲食店で最初に確認したいのは？",
+    options:["来店数・客単価・リピート率","店長の星座","椅子の色だけ","看板の重さ"],
+    answer:0,
+    exp:"飲食店でも売上を分解して見ると、改善ポイントが見えます。"
+  },
+  {
+    q:"コンサル思考で大切な姿勢は？",
+    options:["事実ベースで考える","思い込みで決める","声量で勝つ","全部後回し"],
+    answer:0,
+    exp:"事実・数字・現場情報をもとに考えることが重要です。"
+  }
+];
+
+let current = 0;
+let score = 0;
+let locked = false;
+
+const questionEl = document.getElementById("question");
+const optionsEl = document.getElementById("options");
+const explainEl = document.getElementById("explain");
+const countEl = document.getElementById("count");
+const scoreEl = document.getElementById("score");
+const barEl = document.getElementById("bar");
+const quizCard = document.getElementById("quizCard");
+const result = document.getElementById("result");
+
+function loadQuestion(){
+  locked = false;
+  const item = questions[current];
+  questionEl.textContent = item.q;
+  optionsEl.innerHTML = "";
+  explainEl.style.display = "none";
+  explainEl.textContent = "";
+
+  countEl.textContent = `Q${current + 1} / ${questions.length}`;
+  scoreEl.textContent = `Score ${score}`;
+  barEl.style.width = `${(current / questions.length) * 100}%`;
+
+  item.options.forEach((opt, index)=>{
+    const btn = document.createElement("button");
+    btn.className = "option";
+    btn.textContent = opt;
+    btn.onclick = ()=>selectAnswer(index, btn);
+    optionsEl.appendChild(btn);
+  });
+}
+
+function selectAnswer(index, btn){
+  if(locked) return;
+  locked = true;
+
+  const item = questions[current];
+  const buttons = document.querySelectorAll(".option");
+
+  buttons.forEach((b,i)=>{
+    b.disabled = true;
+    if(i === item.answer) b.classList.add("correct");
+  });
+
+  if(index === item.answer){
+    score++;
+  }else{
+    btn.classList.add("wrong");
+  }
+
+  scoreEl.textContent = `Score ${score}`;
+  explainEl.style.display = "block";
+  explainEl.textContent = item.exp;
+
+  setTimeout(()=>{
+    current++;
+    if(current < questions.length){
+      loadQuestion();
+    }else{
+      showResult();
+    }
+  },1400);
+}
+
+function showResult(){
+  quizCard.style.display = "none";
+  result.style.display = "block";
+  barEl.style.width = "100%";
+
+  const rate = Math.round((score / questions.length) * 100);
+  document.getElementById("finalScore").textContent = `${score}問正解 / ${questions.length}問中　正答率 ${rate}%`;
+
+  let title = "";
+  let text = "";
+
+  if(rate >= 90){
+    title = "戦略コンサル級";
+    text = "仮説思考・分解力・数字感覚がかなり高いです。問題の本質を見抜く力があります。";
+  }else if(rate >= 70){
+    title = "ビジネス参謀タイプ";
+    text = "かなり良いコンサル思考です。あとは数字比較と優先順位づけを磨くとさらに強くなります。";
+  }else if(rate >= 50){
+    title = "若手コンサル見習い";
+    text = "基本はつかめています。売上分解、MECE、仮説検証を意識すると一気に伸びます。";
+  }else{
+    title = "直感型ビジネスマン";
+    text = "感覚で考えがちかもしれません。まずは『分解する』『数字で見る』『仮説を置く』を意識しましょう。";
+  }
+
+  document.getElementById("resultTitle").textContent = title;
+  document.getElementById("resultText").textContent = text;
+}
+
+function restartQuiz(){
+  current = 0;
+  score = 0;
+  result.style.display = "none";
+  quizCard.style.display = "block";
+  loadQuestion();
+}
+
+loadQuestion();
+</script>
+
+</body>
+</html>
